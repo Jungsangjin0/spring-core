@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean 등록 -->
+	<!-- <bean id="member" class="com.greedy.section01.xmlconfig.MemberDTO">
+		
+	</bean> -->
+	
+	<!-- com.greedy.section01.xmlconfig.MemberDTO memberDTO(id=member) = new com.greedy.section01.xmlconfig.MemberDTO(); -->
+	<!-- 기본생성자를 이용하여 만든 방법 -->
+	
+	
+	<bean id="member" class="com.greedy.section01.xmlconfig.MemberDTO">
+		<constructor-arg index="0" value="1"/>
+		<constructor-arg name="id" value="user01"/>
+		<constructor-arg index="2"><value>pass01</value></constructor-arg>
+		<constructor-arg name="name"><value>홍길동</value></constructor-arg>
+	</bean>
+	
+	<!-- MemberTDO member = new Member(1, "user01", "pass01", "홍길동"); -->
+	
+</beans>

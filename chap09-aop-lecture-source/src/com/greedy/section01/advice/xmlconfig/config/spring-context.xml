@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<bean id="normalStudent" class="com.greedy.section01.advice.xmlconfig.NormalStudent"/>
+	<bean id="greedyStudent" class="com.greedy.section01.advice.xmlconfig.GreedyStudent"/>
+	
+	<!-- 어노테이션에서 사용한 configuration:: xml과 같음 -->	
+	
+	<!-- enableaspectAutoproxy 등록 -->
+	<!-- @EnableAspectjAutoProxy 어노테이션과 동일한 역할을 한다. -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+		
+	<!-- advice 등록 -->
+	<bean id="beforeAdvice" class="com.greedy.section01.advice.xmlconfig.aop.BeforeAttendingAdvice"/>
+	<bean id="afterAdvice" class="com.greedy.section01.advice.xmlconfig.aop.AfterAttendingAdvice"/>
+	<bean id="afterReturningAdvice" class="com.greedy.section01.advice.xmlconfig.aop.AfterReturningAttendingAdvice"/>
+	<bean id="afterThrowingAdvice" class="com.greedy.section01.advice.xmlconfig.aop.AfterThrowingAdvice"/>
+	<bean id="aroundAdvice" class="com.greedy.section01.advice.xmlconfig.aop.AroundAttendingAdvice"/>
+	
+	<!-- aop에 대한 설정 등록 -->
+	<aop:config proxy-target-class="true">
+		<!-- 메소드 이름이 pointcut의 아이디 == id -->
+		<aop:pointcut expression="execution(* com.greedy.section01.advice.xmlconfig..*(..))" id="studyPointcut"/>
+		
+		<!-- aop를 aspect로 등록 id고유할 수 있는 아이디 값 -->
+		<!-- ref 어떠한 advice를 사용할 것인지. bean ::  -->
+		<aop:aspect id="studyAdvisor" ref="beforeAdvice" order="100">
+		<!-- 어떠한 시점에 사용할 것인지 설정 -->
+		<!-- method는 advice의 메소드 이름 -->
+			<aop:before method="beforeAttending" pointcut-ref="studyPointcut"/>
+		</aop:aspect>
+		
+		<aop:aspect id="studyAdvisor" ref="afterAdvice" >
+			<aop:after method="afterAttending" pointcut-ref="studyPointcut"/>
+		</aop:aspect>
+		
+		<aop:aspect id="studyAdvisor" ref="afterReturningAdvice" >
+		<!-- after-returning retuning이라는속성에 메소드에서 사용하는 매개변수 이름 설정 -->
+			<aop:after-returning method="afterReturningAttending" pointcut-ref="studyPointcut" returning="result"/>
+		</aop:aspect>
+		
+		<aop:aspect id="studyAdvisor" ref="afterThrowingAdvice" >
+			<aop:after-throwing method="afterThrowingAttending" pointcut-ref="studyPointcut" throwing="exception"/>
+		</aop:aspect>
+		
+		<aop:aspect id="studyAdvisor" ref="aroundAdvice"> 
+			<aop:around method="aroundAttending" pointcut-ref="studyPointcut"/>
+		</aop:aspect>
+		
+	</aop:config>
+	
+</beans>
